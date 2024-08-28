@@ -2,13 +2,11 @@ package com.enigma.student_report.entity;
 
 import com.enigma.student_report.constant.ConstantTable;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -21,9 +19,12 @@ public class Teacher {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "subject_id", nullable = false)
+    @Column(name = "teacher_email", nullable = false, unique = true)
+    private String teacherEmail;
+
+    @Column(name = "subject_id")
     private String subjectId;
 
-    @Column(name = "subject", nullable = false)
+    @Column(name = "subject")
     private String subject;
 }
