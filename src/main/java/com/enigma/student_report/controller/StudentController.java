@@ -21,15 +21,15 @@ public class StudentController {
 
     @PostMapping
     public ResponseEntity<CommonResponse<Student>> inputStudent(
-            @RequestBody NewStudentRequest student
+            @RequestBody NewStudentRequest newStudent
     ) {
-        Student newStudent = studentService.inputStudent(student);
+        Student student = studentService.inputStudent(newStudent);
 
         CommonResponse<Student> response = CommonResponse
                 .<Student>builder()
                 .statusCode(HttpStatus.CREATED.value())
-                .message(ConstantMessage.INPUT_SUCCES + newStudent.getName())
-                .data(newStudent)
+                .message(ConstantMessage.INPUT_SUCCES + student.getName())
+                .data(student)
                 .build();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
