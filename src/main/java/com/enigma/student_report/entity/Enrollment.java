@@ -17,8 +17,7 @@ import java.util.List;
 @Table(name = ConstantTable.ENROLLMENT)
 public class Enrollment {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "custom_seq")
-    @SequenceGenerator(name = "custom_seq", sequenceName = "custom_id_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     @ManyToOne

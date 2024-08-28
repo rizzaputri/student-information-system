@@ -15,8 +15,7 @@ import lombok.Setter;
 @Table(name = ConstantTable.SUBJECT)
 public class Subject {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "custom_seq")
-    @SequenceGenerator(name = "custom_seq", sequenceName = "custom_id_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     @Column(name = "name", nullable = false)
