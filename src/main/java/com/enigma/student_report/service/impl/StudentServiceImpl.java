@@ -37,7 +37,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public List<Student> getAllStudents(String name) {
         if (name != null) {
-            return studentRepository.findAllByNameLike(name);
+            return studentRepository.findAllByNameLike("%" + name + "%");
         }
         return studentRepository.findAll();
     }
