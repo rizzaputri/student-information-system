@@ -46,11 +46,10 @@
 
 ## 7. Git Branch Names
 
-- **Format**: `feature-[FeatureName]`
+- **Format**: `feature-name`
 - **Rules**:
     - Gunakan format kebab-case untuk nama branch.
-    - Gunakan format PascalCase untuk nama fitur.
-    - Contoh: `feature-SubjectEnrollment`, `feature-StudentEnrollment`
+    - Contoh: `feature-register`, `feature-enrollment`
 
 ## 8. Commit Message
 
