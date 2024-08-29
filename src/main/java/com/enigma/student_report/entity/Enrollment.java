@@ -2,15 +2,13 @@ package com.enigma.student_report.entity;
 
 import com.enigma.student_report.constant.ConstantTable;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -30,6 +28,6 @@ public class Enrollment {
     @Column(name = "enrollment_term", nullable = false)
     private String enrollmentTerm;
 
-    @Column(name = "study_load", nullable = false)
+    @Column(name = "study_load")
     private Integer studyLoad;
 }

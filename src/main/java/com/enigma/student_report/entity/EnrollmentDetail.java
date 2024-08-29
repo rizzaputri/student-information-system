@@ -2,13 +2,11 @@ package com.enigma.student_report.entity;
 
 import com.enigma.student_report.constant.ConstantTable;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -29,7 +27,4 @@ public class EnrollmentDetail {
     @ManyToOne
     @JoinColumn(name = "teacher_id")
     private Teacher teacher;
-
-    @Column(name = "lessons_hours", nullable = false)
-    private Integer lessonsHours;
 }
