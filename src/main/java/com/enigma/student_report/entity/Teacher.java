@@ -21,10 +21,4 @@ public class Teacher {
 
     @Column(name = "teacher_email", nullable = false, unique = true)
     private String teacherEmail;
-
-    @Column(name = "subject_id")
-    private String subjectId;
-
-    @Column(name = "subject")
-    private String subject;
 }
