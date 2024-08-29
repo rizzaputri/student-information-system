@@ -1,6 +1,6 @@
-package com.enigma.student_report.entity;
+package com.enigma.enigma_sis.entity;
 
-import com.enigma.student_report.constant.ConstantTable;
+import com.enigma.enigma_sis.constant.ConstantTable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,9 +28,6 @@ public class Enrollment {
     @OneToMany(mappedBy = "enrollment")
     private List<EnrollmentDetail> enrollmentDetails;
 
-    @Column(name = "enrollment_term", nullable = false)
-    private String enrollmentTerm;
-
-    @Column(name = "study_load", nullable = false)
+    @Column(name = "study_load")
     private Integer studyLoad;
 }

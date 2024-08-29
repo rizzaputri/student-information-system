@@ -1,14 +1,14 @@
-package com.enigma.student_report.entity;
+package com.enigma.enigma_sis.entity;
 
-import com.enigma.student_report.constant.ConstantTable;
+import com.enigma.enigma_sis.constant.ConstantTable;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -22,9 +22,12 @@ public class Teacher {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "subject_id", nullable = false)
-    private String subjectId;
+    @Column(name = "email", nullable = false)
+    private String email;
 
-    @Column(name = "subject", nullable = false)
-    private String subject;
+    @Column(name = "mobile_phone")
+    private String mobilePhone;
+
+    @OneToMany(mappedBy = "teacher")
+    private List<Subject> subjects;
 }

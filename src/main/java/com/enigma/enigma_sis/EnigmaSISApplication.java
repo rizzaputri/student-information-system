@@ -1,13 +1,13 @@
-package com.enigma.student_report;
+package com.enigma.enigma_sis;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class StudentReportApplication {
+public class EnigmaSISApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(StudentReportApplication.class, args);
+		SpringApplication.run(EnigmaSISApplication.class, args);
 	}
 
 }
