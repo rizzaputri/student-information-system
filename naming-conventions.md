@@ -6,11 +6,11 @@
 
 ## 2. Package Names
 
-- **Format**: `com.enigma.student_report.[module]`
+- **Format**: `com.enigma.siakad.[module]`
 - **Rules**:
     - Gunakan huruf kecil.
     - Nama package menggunakan satu kata.
-    - Contoh: `com.enigma.student_report.controller`, `com.enigma.student_report.repository`
+    - Contoh: `com.enigma.siakad.controller`, `com.enigma.siakad.repository`
 
 ## 3. Class Names
 
@@ -42,15 +42,15 @@
 - **Rules**:
     - Gunakan format snake_case untuk nama repository.
     - Gunakan format kebab-case untuk nama aplikasi.
-    - Contoh: `ch_sb_1_student_report`
+    - Contoh: `ch_sb_1_sistem-informasi-akademik`
 
 ## 7. Git Branch Names
 
-- **Format**: `feature-[FeatureName]`
+- **Format**: `kebab-case`
 - **Rules**:
     - Gunakan format kebab-case untuk nama branch.
-    - Gunakan format PascalCase untuk nama fitur.
-    - Contoh: `feature-SubjectEnrollment`, `feature-StudentEnrollment`
+    - Awali nama branch dengan kata `feature`.
+    - Contoh: `feature-login`, `feature-register`
 
 ## 8. Commit Message
 
