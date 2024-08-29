@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.enigma</groupId>
-	<artifactId>student-report</artifactId>
+	<artifactId>enigma-sis</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>student-report</name>
-	<description>Student Report Application</description>
+	<name>enigma-sis</name>
+	<description>Student Information System Application</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -72,6 +72,11 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.auth0</groupId>
+			<artifactId>java-jwt</artifactId>
+			<version>4.4.0</version>
 		</dependency>
 	</dependencies>
 

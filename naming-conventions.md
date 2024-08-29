@@ -6,11 +6,11 @@
 
 ## 2. Package Names
 
-- **Format**: `com.enigma.student_report.[module]`
+- **Format**: `com.enigma.enigma_sis.[module]`
 - **Rules**:
     - Gunakan huruf kecil.
     - Nama package menggunakan satu kata.
-    - Contoh: `com.enigma.student_report.controller`, `com.enigma.student_report.repository`
+    - Contoh: `com.enigma.enigma_sis.controller`, `com.enigma.enigma_sis.repository`
 
 ## 3. Class Names
 
