@@ -6,11 +6,11 @@
 
 ## 2. Package Names
 
-- **Format**: `com.enigma.siakad.[module]`
+- **Format**: `com.enigma.enigma_sis.[module]`
 - **Rules**:
     - Gunakan huruf kecil.
     - Nama package menggunakan satu kata.
-    - Contoh: `com.enigma.siakad.controller`, `com.enigma.siakad.repository`
+    - Contoh: `com.enigma.enigma_sis.controller`, `com.enigma.enigma_sis.repository`
 
 ## 3. Class Names
 
@@ -42,7 +42,7 @@
 - **Rules**:
     - Gunakan format snake_case untuk nama repository.
     - Gunakan format kebab-case untuk nama aplikasi.
-    - Contoh: `ch_sb_1_sistem-informasi-akademik`
+    - Contoh: `ch_sb_1_enigma-sis`
 
 ## 7. Git Branch Names
 
@@ -64,6 +64,6 @@
     - `[STYLE]` melakukan perubahan yang tidak berdampak pada program
     - `[CHORE]` melakukan commit awal
 - **Contoh**
-    - "`[FEAT]` Add feature : student input"
+    - "`[FEAT]` Add feature login"
     - "`[DOCS]` Fix typo in naming-conventions.md"
     - "`[STYLE]` Add whitespace on Student.java"
