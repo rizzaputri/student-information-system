@@ -2,7 +2,9 @@ package com.enigma.enigma_sis.controller;
 
 import com.enigma.enigma_sis.constant.ApiUrl;
 import com.enigma.enigma_sis.constant.ConstantMessage;
+import com.enigma.enigma_sis.dto.request.UpdateStudentRequest;
 import com.enigma.enigma_sis.dto.response.CommonResponse;
+import com.enigma.enigma_sis.dto.response.StudentResponse;
 import com.enigma.enigma_sis.entity.Student;
 import com.enigma.enigma_sis.service.StudentService;
 import lombok.RequiredArgsConstructor;
@@ -18,28 +20,14 @@ import java.util.List;
 public class StudentController {
     private final StudentService studentService;
 
-    @PostMapping
-    public ResponseEntity<CommonResponse<Student>> inputStudent(
-            @RequestBody Student student
-    ) {
-        CommonResponse<Student> response = CommonResponse
-                .<Student>builder()
-                .statusCode(HttpStatus.CREATED.value())
-                .message(ConstantMessage.INPUT_SUCCES + student.getName())
-                .data(student)
-                .build();
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    }
-
     @GetMapping(path = ApiUrl.PATH_VAR_ID)
-    public ResponseEntity<CommonResponse<Student>> getStudentById(
+    public ResponseEntity<CommonResponse<StudentResponse>> getStudentById(
             @PathVariable String id
     ) {
-        Student student = studentService.getStudentById(id);
+        StudentResponse student = studentService.getStudentById(id);
 
-        CommonResponse<Student> response = CommonResponse
-                .<Student>builder()
+        CommonResponse<StudentResponse> response = CommonResponse
+                .<StudentResponse>builder()
                 .statusCode(HttpStatus.OK.value())
                 .message(ConstantMessage.FETCH_SUCCES + student.getName())
                 .data(student)
@@ -49,13 +37,13 @@ public class StudentController {
     }
 
     @GetMapping
-    public ResponseEntity<CommonResponse<List<Student>>> getAllStudents(
+    public ResponseEntity<CommonResponse<List<StudentResponse>>> getAllStudents(
             @RequestParam(name = "name", required = false) String name
     ) {
-        List<Student> students = studentService.getAllStudents(name);
+        List<StudentResponse> students = studentService.getAllStudents(name);
 
-        CommonResponse<List<Student>> response = CommonResponse
-                .<List<Student>>builder()
+        CommonResponse<List<StudentResponse>> response = CommonResponse
+                .<List<StudentResponse>>builder()
                 .statusCode(HttpStatus.OK.value())
                 .message(ConstantMessage.FETCH_SUCCES + "all datas")
                 .data(students)
@@ -65,13 +53,13 @@ public class StudentController {
     }
 
     @PutMapping
-    public ResponseEntity<CommonResponse<Student>> updateStudent(
-            @RequestBody Student student
+    public ResponseEntity<CommonResponse<StudentResponse>> updateStudent(
+            @RequestBody UpdateStudentRequest student
     ) {
-        Student updateStudent = studentService.updateStudent(student);
+        StudentResponse updateStudent = studentService.updateStudent(student);
 
-        CommonResponse<Student> response = CommonResponse
-                .<Student>builder()
+        CommonResponse<StudentResponse> response = CommonResponse
+                .<StudentResponse>builder()
                 .statusCode(HttpStatus.OK.value())
                 .message(ConstantMessage.UPDATE_SUCCES + updateStudent.getName())
                 .data(updateStudent)
@@ -84,7 +72,7 @@ public class StudentController {
     public ResponseEntity<CommonResponse<?>> deleteStudent(
             @PathVariable String id
     ) {
-        studentService.deleteStudent(id);
+        studentService.deleteById(id);
 
         CommonResponse<?> response = CommonResponse
                 .builder()

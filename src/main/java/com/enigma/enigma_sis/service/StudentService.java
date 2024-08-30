@@ -1,13 +1,16 @@
 package com.enigma.enigma_sis.service;
 
+import com.enigma.enigma_sis.dto.request.UpdateStudentRequest;
+import com.enigma.enigma_sis.dto.response.StudentResponse;
 import com.enigma.enigma_sis.entity.Student;
 
 import java.util.List;
 
 public interface StudentService {
     Student inputStudent(Student student);
-    Student getStudentById(String id);
-    List<Student> getAllStudents(String name);
-    Student updateStudent(Student student);
-    void deleteStudent(String id);
+    Student getById(String studentId);
+    StudentResponse getStudentById(String id);
+    List<StudentResponse> getAllStudents(String name);
+    StudentResponse updateStudent(UpdateStudentRequest student);
+    void deleteById(String id);
 }

@@ -27,7 +27,7 @@ public class JwtServiceImpl implements JwtService {
 
     public JwtServiceImpl(
             @Value("${enigma_shop.jwt.secret_key}") String JWT_SECRET,
-            @Value("${enigma_shop.jwt-issuer}") String ISSUER,
+            @Value("${enigma_shop.jwt.issuer}") String ISSUER,
             @Value("${enigma_shop.jwt.expiration_in_second}") long JWT_EXPIRATION
     ) {
         this.JWT_SECRET = JWT_SECRET;

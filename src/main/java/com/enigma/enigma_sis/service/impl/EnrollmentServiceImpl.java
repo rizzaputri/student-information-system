@@ -31,7 +31,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     @Override
     public EnrollmentResponse create(EnrollmentRequest enrollmentRequest) {
         // Cari objek Student sesuai dengan ID dari Enrollment Request
-        Student studentById = studentService.getStudentById(enrollmentRequest.getStudentId());
+        Student studentById = studentService.getById(enrollmentRequest.getStudentId());
 
         // Buat objek Enrollment tanpa Enrollment Detail dan simpan
         Enrollment enrollment = Enrollment

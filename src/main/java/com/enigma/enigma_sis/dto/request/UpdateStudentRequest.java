@@ -9,7 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class NewStudentRequest {
+public class UpdateStudentRequest {
+    private String id;
     private String name;
+    private String studyGroup;
     private String mobilePhone;
+    private String studentEmail;
 }
