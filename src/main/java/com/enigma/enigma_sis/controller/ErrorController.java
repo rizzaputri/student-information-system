@@ -47,7 +47,7 @@ public class ErrorController {
 
         if (e.getMessage().contains("foreign key constraint")) {
             builder.statusCode(HttpStatus.BAD_REQUEST.value());
-            builder.message("Cannot delete data because other table depent on it");
+            builder.message("Cannot delete data because other table depend on it");
             httpStatus = HttpStatus.BAD_REQUEST;
         } else if (e.getMessage().contains("unique constraint") || e.getMessage().contains("Duplicate entry")){
             builder.statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
