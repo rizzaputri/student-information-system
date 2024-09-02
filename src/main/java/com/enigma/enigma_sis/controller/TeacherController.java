@@ -2,13 +2,14 @@ package com.enigma.enigma_sis.controller;
 
 import com.enigma.enigma_sis.constant.ApiUrl;
 import com.enigma.enigma_sis.constant.ConstantMessage;
-import com.enigma.enigma_sis.dto.request.NewTeacherRequest;
+import com.enigma.enigma_sis.dto.request.UpdateTeacherRequest;
 import com.enigma.enigma_sis.dto.response.CommonResponse;
-import com.enigma.enigma_sis.entity.Teacher;
+import com.enigma.enigma_sis.dto.response.TeacherResponse;
 import com.enigma.enigma_sis.service.TeacherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,30 +20,14 @@ import java.util.List;
 public class TeacherController {
     private final TeacherService teacherService;
 
-    @PostMapping
-    public ResponseEntity<CommonResponse<Teacher>> createTeacher(
-            @RequestBody NewTeacherRequest newTeacher
-    ) {
-        Teacher teacher = teacherService.inputTeacher(newTeacher);
-
-        CommonResponse<Teacher> response = CommonResponse
-                .<Teacher>builder()
-                .statusCode(HttpStatus.CREATED.value())
-                .message(ConstantMessage.INPUT_SUCCES + teacher.getName())
-                .data(teacher)
-                .build();
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    }
-
     @GetMapping(path = ApiUrl.PATH_VAR_ID)
-    public ResponseEntity<CommonResponse<Teacher>> getTeacherById(
+    public ResponseEntity<CommonResponse<TeacherResponse>> getTeacherById(
             @PathVariable String id
     ) {
-        Teacher teacher = teacherService.getTeacherById(id);
+        TeacherResponse teacher = teacherService.getTeacherById(id);
 
-        CommonResponse<Teacher> response = CommonResponse
-                .<Teacher>builder()
+        CommonResponse<TeacherResponse> response = CommonResponse
+                .<TeacherResponse>builder()
                 .statusCode(HttpStatus.OK.value())
                 .message(ConstantMessage.FETCH_SUCCES + teacher.getName())
                 .data(teacher)
@@ -52,15 +37,15 @@ public class TeacherController {
     }
 
     @GetMapping
-    public ResponseEntity<CommonResponse<List<Teacher>>> getAllTeachers(
+    public ResponseEntity<CommonResponse<List<TeacherResponse>>> getAllTeachers(
             @RequestParam(name = "name", required = false) String name
     ) {
-        List<Teacher> teachers = teacherService.getAllTeachers(name);
+        List<TeacherResponse> teachers = teacherService.getAllTeachers(name);
 
-        CommonResponse<List<Teacher>> response = CommonResponse
-                .<List<Teacher>>builder()
+        CommonResponse<List<TeacherResponse>> response = CommonResponse
+                .<List<TeacherResponse>>builder()
                 .statusCode(HttpStatus.OK.value())
-                .message(ConstantMessage.FETCH_SUCCES + "all datas")
+                .message(ConstantMessage.FETCH_SUCCES + "all teachers")
                 .data(teachers)
                 .build();
 
@@ -68,13 +53,13 @@ public class TeacherController {
     }
 
     @PutMapping
-    public ResponseEntity<CommonResponse<Teacher>> updateStudent(
-            @RequestBody Teacher teacher
+    public ResponseEntity<CommonResponse<TeacherResponse>> updateTeacher(
+            @RequestBody UpdateTeacherRequest teacher
     ) {
-        Teacher updateTeacher = teacherService.updateTeacher(teacher);
+        TeacherResponse updateTeacher = teacherService.updateTeacher(teacher);
 
-        CommonResponse<Teacher> response = CommonResponse
-                .<Teacher>builder()
+        CommonResponse<TeacherResponse> response = CommonResponse
+                .<TeacherResponse>builder()
                 .statusCode(HttpStatus.OK.value())
                 .message(ConstantMessage.UPDATE_SUCCES + updateTeacher.getName())
                 .data(updateTeacher)
@@ -83,16 +68,35 @@ public class TeacherController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @PutMapping(path = ApiUrl.PATH_VAR_ID)
+    public ResponseEntity<CommonResponse<?>> updateStatus(
+            @PathVariable String id, @RequestParam(name = "status") Boolean status
+    ) {
+        teacherService.updateStatusById(id, status);
+
+        CommonResponse<?> response = CommonResponse
+                .builder()
+                .statusCode(HttpStatus.OK.value())
+                .message(ConstantMessage.UPDATE_SUCCES + teacherService.getById(id).getName())
+                .data("OK")
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @DeleteMapping(path = ApiUrl.PATH_VAR_ID)
-    public ResponseEntity<CommonResponse<?>> deleteStudent(
+    public ResponseEntity<CommonResponse<?>> deleteTeacher(
             @PathVariable String id
     ) {
-        teacherService.deleteTeacher(id);
+        teacherService.deleteById(id);
 
         CommonResponse<?> response = CommonResponse
                 .builder()
                 .statusCode(HttpStatus.OK.value())
                 .message(ConstantMessage.DELETE_SUCCES + id)
+                .data("OK")
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(response);

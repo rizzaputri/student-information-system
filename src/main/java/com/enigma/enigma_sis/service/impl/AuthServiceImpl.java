@@ -6,14 +6,14 @@ import com.enigma.enigma_sis.dto.response.LoginResponse;
 import com.enigma.enigma_sis.dto.response.RegisterResponse;
 import com.enigma.enigma_sis.entity.Role;
 import com.enigma.enigma_sis.entity.Student;
+import com.enigma.enigma_sis.entity.Teacher;
 import com.enigma.enigma_sis.entity.UserAccount;
 import com.enigma.enigma_sis.repository.UserAccountRepository;
-import com.enigma.enigma_sis.service.AuthService;
-import com.enigma.enigma_sis.service.JwtService;
-import com.enigma.enigma_sis.service.RoleService;
-import com.enigma.enigma_sis.service.StudentService;
+import com.enigma.enigma_sis.service.*;
+import com.enigma.enigma_sis.util.ValidationUtil;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,11 +29,15 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthServiceImpl implements AuthService {
     private final UserAccountRepository userAccountRepository;
     private final RoleService roleService;
     private final StudentService studentService;
+    private final TeacherService teacherService;
     private final JwtService jwtService;
+
+    private final ValidationUtil validationUtil;
 
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -51,9 +55,9 @@ public class AuthServiceImpl implements AuthService {
             return;
         }
 
-        Role student = roleService.getOrSave(UserRole.USER_STUDENT);
-        Role teacher = roleService.getOrSave(UserRole.USER_TEACHER);
-        Role superAdmin = roleService.getOrSave(UserRole.USER_SUPER_ADMIN);
+        Role student = roleService.getOrSave(UserRole.ROLE_STUDENT);
+        Role teacher = roleService.getOrSave(UserRole.ROLE_TEACHER);
+        Role superAdmin = roleService.getOrSave(UserRole.ROLE_SUPER_ADMIN);
 
         UserAccount newSuperAdmin = UserAccount.builder()
                 .username(usernameSuperAdmin)
@@ -67,31 +71,64 @@ public class AuthServiceImpl implements AuthService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public RegisterResponse register(AuthRequest authRequest) throws DataIntegrityViolationException {
-        // 1. Membuat dan menyimpan User Account
-        Role role = roleService.getOrSave(UserRole.USER_STUDENT);
-        String hashPassword = passwordEncoder.encode(authRequest.getPassword());
-        UserAccount userAccount = UserAccount.builder()
-                .username(authRequest.getUsername())
-                .password(hashPassword)
-                .role(List.of(role))
-                .isEnable(true)
-                .build();
-        userAccountRepository.saveAndFlush(userAccount);
+        validationUtil.validate(authRequest);
+        RegisterResponse response = new RegisterResponse();
 
-        // 2. Membuat dan menyimpan Student
-        Student student = Student.builder()
-                .userAccount(userAccount)
-                .build();
-        studentService.inputStudent(student);
+        if (authRequest.getEmail().contains("@student.enigma.ac.id")) {
+            Role role = roleService.getOrSave(UserRole.ROLE_STUDENT);
+            String hashPassword = passwordEncoder.encode(authRequest.getPassword());
+            UserAccount userAccount = UserAccount.builder()
+                    .username(authRequest.getUsername())
+                    .password(hashPassword)
+                    .role(List.of(role))
+                    .isEnable(true)
+                    .build();
+            userAccountRepository.saveAndFlush(userAccount);
 
-        return RegisterResponse.builder()
-                .username(userAccount.getUsername())
-                .roles(userAccount
-                        .getAuthorities()
-                        .stream()
-                        .map(GrantedAuthority::getAuthority)
-                        .toList())
-                .build();
+            Student student = Student.builder()
+                    .studentEmail(authRequest.getEmail())
+                    .userAccount(userAccount)
+                    .build();
+            studentService.inputStudent(student);
+
+            response = RegisterResponse.builder()
+                    .username(userAccount.getUsername())
+                    .roles(userAccount
+                            .getAuthorities()
+                            .stream()
+                            .map(GrantedAuthority::getAuthority)
+                            .toList())
+                    .build();
+        } else if (authRequest.getEmail().contains("@teacher.enigma.ac.id")) {
+            Role role = roleService.getOrSave(UserRole.ROLE_TEACHER);
+            String hashPassword = passwordEncoder.encode(authRequest.getPassword());
+            UserAccount userAccount = UserAccount.builder()
+                    .username(authRequest.getUsername())
+                    .password(hashPassword)
+                    .role(List.of(role))
+                    .isEnable(true)
+                    .build();
+            userAccountRepository.saveAndFlush(userAccount);
+
+            Teacher teacher = Teacher.builder()
+                    .status(true)
+                    .teacherEmail(authRequest.getEmail())
+                    .userAccount(userAccount)
+                    .build();
+            teacherService.inputTeacher(teacher);
+            log.debug("Teacher created and saved: {}", teacher);
+
+            response = RegisterResponse.builder()
+                    .username(userAccount.getUsername())
+                    .roles(userAccount
+                            .getAuthorities()
+                            .stream()
+                            .map(GrantedAuthority::getAuthority)
+                            .toList())
+                    .build();
+        }
+
+        return response;
     }
 
     @Transactional(readOnly = true)

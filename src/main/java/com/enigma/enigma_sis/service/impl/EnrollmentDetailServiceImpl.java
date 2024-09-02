@@ -13,7 +13,6 @@ import java.util.List;
 public class EnrollmentDetailServiceImpl implements EnrollmentDetailService {
     private final EnrollmentDetailRepository enrollmentDetailRepository;
 
-
     @Override
     public List<EnrollmentDetail> createBulk(List<EnrollmentDetail> enrollmentDetails) {
         return enrollmentDetailRepository.saveAllAndFlush(enrollmentDetails);

@@ -4,6 +4,8 @@ import com.enigma.enigma_sis.constant.ConstantTable;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @Builder
@@ -18,6 +20,9 @@ public class Student {
 
     @Column(name = "name")
     private String name;
+
+    @Column(name = "birth_date")
+    private Date birthDate;
 
     @Column(name = "study_group")
     private String studyGroup;

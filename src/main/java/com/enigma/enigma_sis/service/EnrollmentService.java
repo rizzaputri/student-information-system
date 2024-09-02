@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface EnrollmentService {
     EnrollmentResponse create(EnrollmentRequest enrollmentRequest);
-    List<EnrollmentResponse> getAll();
+    List<EnrollmentResponse> getAll(String studentId);
 }

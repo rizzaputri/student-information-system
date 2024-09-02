@@ -4,11 +4,16 @@ import com.enigma.enigma_sis.constant.ConstantMessage;
 import com.enigma.enigma_sis.dto.request.UpdateStudentRequest;
 import com.enigma.enigma_sis.dto.response.StudentResponse;
 import com.enigma.enigma_sis.entity.Student;
+import com.enigma.enigma_sis.entity.UserAccount;
 import com.enigma.enigma_sis.repository.StudentRepository;
 import com.enigma.enigma_sis.service.StudentService;
+import com.enigma.enigma_sis.service.UserService;
+import com.enigma.enigma_sis.util.ValidationUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -17,6 +22,8 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
+    private final UserService userService;
+    private final ValidationUtil validationUtil;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -24,6 +31,7 @@ public class StudentServiceImpl implements StudentService {
         return studentRepository.saveAndFlush(student);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Student getById(String id) {
         return studentRepository.findById(id).orElseThrow(
@@ -52,15 +60,26 @@ public class StudentServiceImpl implements StudentService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public StudentResponse updateStudent(UpdateStudentRequest student) {
+        validationUtil.validate(student);
+
         Student currentStudent = getById(student.getId());
+
+        UserAccount userAccount = userService.getByContext();
+        if (!userAccount.getId().equals(currentStudent.getUserAccount().getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                    ConstantMessage.USER_INVALID);
+        }
+
         currentStudent.setName(student.getName());
+        currentStudent.setBirthDate(student.getBirthDate());
         currentStudent.setStudyGroup(student.getStudyGroup());
         currentStudent.setMobilePhone(student.getMobilePhone());
-        currentStudent.setStudentEmail(student.getStudentEmail());
         studentRepository.saveAndFlush(currentStudent);
+
         return convertToStudentResponse(currentStudent);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void deleteById(String id) {
         Student currentStudent = getById(id);

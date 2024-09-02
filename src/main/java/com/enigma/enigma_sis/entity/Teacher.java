@@ -4,6 +4,8 @@ import com.enigma.enigma_sis.constant.ConstantTable;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Builder
@@ -16,9 +18,19 @@ public class Teacher {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "teacher_email", nullable = false, unique = true)
+    @Column(name = "status")
+    private Boolean status;
+
+    @Column(name = "mobile_phone")
+    private String mobilePhone;
+
+    @Column(name = "teacher_email")
     private String teacherEmail;
+
+    @OneToOne
+    @JoinColumn(name = "user_account_id")
+    private UserAccount userAccount;
 }

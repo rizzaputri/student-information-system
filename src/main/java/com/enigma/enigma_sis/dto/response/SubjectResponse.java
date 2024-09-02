@@ -1,4 +1,4 @@
-package com.enigma.enigma_sis.dto.request;
+package com.enigma.enigma_sis.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class NewTeacherRequest {
+public class SubjectResponse {
+    private String id;
     private String name;
-    private String teacherEmail;
+    private Integer lessonsHours;
+    private String teacherId;
 }

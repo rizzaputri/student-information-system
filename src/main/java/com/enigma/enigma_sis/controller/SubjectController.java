@@ -2,13 +2,15 @@ package com.enigma.enigma_sis.controller;
 
 import com.enigma.enigma_sis.constant.ApiUrl;
 import com.enigma.enigma_sis.constant.ConstantMessage;
-import com.enigma.enigma_sis.dto.request.NewSubjectRequest;
+import com.enigma.enigma_sis.dto.request.SubjectRequest;
 import com.enigma.enigma_sis.dto.response.CommonResponse;
+import com.enigma.enigma_sis.dto.response.SubjectResponse;
 import com.enigma.enigma_sis.entity.Subject;
 import com.enigma.enigma_sis.service.SubjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,14 +21,15 @@ import java.util.List;
 public class SubjectController {
     private final SubjectService subjectService;
 
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @PostMapping
-    public ResponseEntity<CommonResponse<Subject>> inputSubject(
-            @RequestBody NewSubjectRequest newSubject
+    public ResponseEntity<CommonResponse<SubjectResponse>> inputSubject(
+            @RequestBody SubjectRequest newSubject
     ) {
-        Subject subject = subjectService.inputSubject(newSubject);
+        SubjectResponse subject = subjectService.createSubject(newSubject);
 
-        CommonResponse<Subject> response = CommonResponse
-                .<Subject>builder()
+        CommonResponse<SubjectResponse> response = CommonResponse
+                .<SubjectResponse>builder()
                 .statusCode(HttpStatus.CREATED.value())
                 .message(ConstantMessage.INPUT_SUCCES + subject.getName())
                 .data(subject)
@@ -36,13 +39,13 @@ public class SubjectController {
     }
 
     @GetMapping(path = ApiUrl.PATH_VAR_ID)
-    public ResponseEntity<CommonResponse<Subject>> getSubjectById(
+    public ResponseEntity<CommonResponse<SubjectResponse>> getSubjectById(
             @PathVariable String id
     ) {
-        Subject subject = subjectService.getSubjectById(id);
+        SubjectResponse subject = subjectService.getSubjectById(id);
 
-        CommonResponse<Subject> response = CommonResponse
-                .<Subject>builder()
+        CommonResponse<SubjectResponse> response = CommonResponse
+                .<SubjectResponse>builder()
                 .statusCode(HttpStatus.OK.value())
                 .message(ConstantMessage.FETCH_SUCCES + subject.getName())
                 .data(subject)
@@ -52,29 +55,30 @@ public class SubjectController {
     }
 
     @GetMapping
-    public ResponseEntity<CommonResponse<List<Subject>>> getAllSubjects(
+    public ResponseEntity<CommonResponse<List<SubjectResponse>>> getAllSubjects(
             @RequestParam(name = "name", required = false) String name
     ) {
-        List<Subject> subjects = subjectService.getAllSubjects(name);
+        List<SubjectResponse> subjects = subjectService.getAllSubjects(name);
 
-        CommonResponse<List<Subject>> response = CommonResponse
-                .<List<Subject>>builder()
+        CommonResponse<List<SubjectResponse>> response = CommonResponse
+                .<List<SubjectResponse>>builder()
                 .statusCode(HttpStatus.OK.value())
-                .message(ConstantMessage.FETCH_SUCCES + "all datas")
+                .message(ConstantMessage.FETCH_SUCCES + "all subjects")
                 .data(subjects)
                 .build();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @PutMapping
-    public ResponseEntity<CommonResponse<Subject>> updateSubject(
-            @RequestBody Subject subject
+    public ResponseEntity<CommonResponse<SubjectResponse>> updateSubject(
+            @RequestBody SubjectRequest subject
     ) {
-        Subject updateSubject = subjectService.updateSubject(subject);
+        SubjectResponse updateSubject = subjectService.updateSubject(subject);
 
-        CommonResponse<Subject> response = CommonResponse
-                .<Subject>builder()
+        CommonResponse<SubjectResponse> response = CommonResponse
+                .<SubjectResponse>builder()
                 .statusCode(HttpStatus.OK.value())
                 .message(ConstantMessage.UPDATE_SUCCES + updateSubject.getName())
                 .data(updateSubject)
@@ -83,16 +87,18 @@ public class SubjectController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @DeleteMapping(path = ApiUrl.PATH_VAR_ID)
     public ResponseEntity<CommonResponse<?>> deleteSubject(
             @PathVariable String id
     ) {
-        subjectService.deleteSubject(id);
+        subjectService.deleteById(id);
 
         CommonResponse<?> response = CommonResponse
                 .builder()
                 .statusCode(HttpStatus.OK.value())
                 .message(ConstantMessage.DELETE_SUCCES + id)
+                .data("OK")
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(response);

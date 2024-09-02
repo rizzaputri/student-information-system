@@ -10,6 +10,7 @@ import com.enigma.enigma_sis.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,7 +46,7 @@ public class StudentController {
         CommonResponse<List<StudentResponse>> response = CommonResponse
                 .<List<StudentResponse>>builder()
                 .statusCode(HttpStatus.OK.value())
-                .message(ConstantMessage.FETCH_SUCCES + "all datas")
+                .message(ConstantMessage.FETCH_SUCCES + "all students")
                 .data(students)
                 .build();
 
@@ -68,6 +69,7 @@ public class StudentController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @DeleteMapping(path = ApiUrl.PATH_VAR_ID)
     public ResponseEntity<CommonResponse<?>> deleteStudent(
             @PathVariable String id
@@ -78,6 +80,7 @@ public class StudentController {
                 .builder()
                 .statusCode(HttpStatus.OK.value())
                 .message(ConstantMessage.DELETE_SUCCES + id)
+                .data("OK")
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(response);

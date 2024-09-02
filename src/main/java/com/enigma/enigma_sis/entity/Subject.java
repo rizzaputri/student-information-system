@@ -16,10 +16,10 @@ public class Subject {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "lessons_hours", nullable = false)
+    @Column(name = "lessons_hours")
     private Integer lessonsHours;
 
     @ManyToOne

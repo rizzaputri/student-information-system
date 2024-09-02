@@ -1,14 +1,17 @@
 package com.enigma.enigma_sis.service;
 
-import com.enigma.enigma_sis.dto.request.NewTeacherRequest;
+import com.enigma.enigma_sis.dto.request.UpdateTeacherRequest;
+import com.enigma.enigma_sis.dto.response.TeacherResponse;
 import com.enigma.enigma_sis.entity.Teacher;
 
 import java.util.List;
 
 public interface TeacherService {
-    Teacher inputTeacher(NewTeacherRequest teacher);
-    Teacher getTeacherById(String id);
-    List<Teacher> getAllTeachers(String name);
-    Teacher updateTeacher(Teacher teacher);
-    void deleteTeacher(String id);
+    Teacher inputTeacher(Teacher teacher);
+    Teacher getById(String id);
+    TeacherResponse getTeacherById(String id);
+    List<TeacherResponse> getAllTeachers(String name);
+    TeacherResponse updateTeacher(UpdateTeacherRequest teacher);
+    void updateStatusById(String id, Boolean status);
+    void deleteById(String id);
 }
