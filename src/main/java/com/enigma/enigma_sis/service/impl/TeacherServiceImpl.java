@@ -3,13 +3,20 @@ package com.enigma.enigma_sis.service.impl;
 import com.enigma.enigma_sis.constant.ConstantMessage;
 import com.enigma.enigma_sis.dto.request.UpdateTeacherRequest;
 import com.enigma.enigma_sis.dto.response.TeacherResponse;
+import com.enigma.enigma_sis.entity.Subject;
 import com.enigma.enigma_sis.entity.Teacher;
 import com.enigma.enigma_sis.entity.UserAccount;
 import com.enigma.enigma_sis.repository.TeacherRepository;
 import com.enigma.enigma_sis.service.TeacherService;
 import com.enigma.enigma_sis.service.UserService;
+import com.enigma.enigma_sis.specification.SubjectSpecification;
+import com.enigma.enigma_sis.specification.TeacherSpecification;
 import com.enigma.enigma_sis.util.ValidationUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,9 +29,7 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class TeacherServiceImpl implements TeacherService {
     private final TeacherRepository teacherRepository;
-
     private final UserService userService;
-
     private final ValidationUtil validationUtil;
 
     @Transactional(rollbackFor = Exception.class)
@@ -48,16 +53,16 @@ public class TeacherServiceImpl implements TeacherService {
         return convertToTeacherResponse(teacher);
     }
 
-
-    @Transactional(readOnly = true)
     @Override
-    public List<TeacherResponse> getAllTeachers(String name) {
-        if (name != null) {
-            List<Teacher> teacherParameterList = teacherRepository.findAllByNameLike("%" + name + "%");
-            return teacherParameterList.stream().map(this::convertToTeacherResponse).toList();
+    public Page<Teacher> getAllTeachers(String name, String page) {
+        Pageable pageable = PageRequest.of(Integer.parseInt(page), 2);
+        Specification<Teacher> specification = Specification.where(null);
+
+        if (name != null && !name.isEmpty()) {
+            specification = specification.and(TeacherSpecification.hasName(name));
         }
-        List<Teacher> teacherList = teacherRepository.findAll();
-        return teacherList.stream().map(this::convertToTeacherResponse).toList();
+
+        return teacherRepository.findAll(specification, pageable);
     }
 
     @Transactional(rollbackFor = Exception.class)

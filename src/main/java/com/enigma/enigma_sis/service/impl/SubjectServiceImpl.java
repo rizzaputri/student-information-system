@@ -8,12 +8,16 @@ import com.enigma.enigma_sis.entity.Teacher;
 import com.enigma.enigma_sis.repository.SubjectRepository;
 import com.enigma.enigma_sis.service.SubjectService;
 import com.enigma.enigma_sis.service.TeacherService;
+import com.enigma.enigma_sis.specification.SubjectSpecification;
 import com.enigma.enigma_sis.util.ValidationUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -57,13 +61,15 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<SubjectResponse> getAllSubjects(String name) {
-        if (name != null) {
-            List<Subject> subjectParameterList = subjectRepository.findAllByNameLike("%" + name + "%");
-            return subjectParameterList.stream().map(this::convertToSubjectResponse).toList();
+    public Page<Subject> getAllSubjects(String name, String page) {
+        Pageable pageable = PageRequest.of(Integer.parseInt(page), 2);
+        Specification<Subject> specification = Specification.where(null);
+
+        if (name != null && !name.isEmpty()) {
+            specification = specification.and(SubjectSpecification.hasName(name));
         }
-        List<Subject> subjectList = subjectRepository.findAll();
-        return subjectList.stream().map(this::convertToSubjectResponse).toList();
+
+        return subjectRepository.findAll(specification, pageable);
     }
 
     @Transactional(rollbackFor = Exception.class)

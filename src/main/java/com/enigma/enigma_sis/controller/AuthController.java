@@ -28,7 +28,7 @@ public class AuthController {
         CommonResponse<RegisterResponse> response = CommonResponse
                 .<RegisterResponse>builder()
                 .statusCode(HttpStatus.CREATED.value())
-                .message(ConstantMessage.REGISTER_SUCCES)
+                .message(ConstantMessage.REGISTER_SUCCESS)
                 .data(register)
                 .build();
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -41,7 +41,7 @@ public class AuthController {
         CommonResponse<LoginResponse> response = CommonResponse
                 .<LoginResponse>builder()
                 .statusCode(HttpStatus.CREATED.value())
-                .message(ConstantMessage.LOGIN_SUCCES)
+                .message(ConstantMessage.LOGIN_SUCCESS)
                 .data(login)
                 .build();
         return ResponseEntity.ok(response);

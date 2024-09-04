@@ -9,7 +9,6 @@ import com.enigma.enigma_sis.service.EnrollmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,7 +27,7 @@ public class EnrollmentController {
         CommonResponse<EnrollmentResponse> response = CommonResponse
                 .<EnrollmentResponse>builder()
                 .statusCode(HttpStatus.CREATED.value())
-                .message(ConstantMessage.INPUT_SUCCES + "enrollments")
+                .message(ConstantMessage.INPUT_SUCCESS + "enrollments")
                 .data(enrollment)
                 .paging(null)
                 .build();
@@ -43,7 +42,7 @@ public class EnrollmentController {
         CommonResponse<List<EnrollmentResponse>> response = CommonResponse
                 .<List<EnrollmentResponse>>builder()
                 .statusCode(HttpStatus.OK.value())
-                .message(ConstantMessage.FETCH_SUCCES + "all enrollments")
+                .message(ConstantMessage.FETCH_SUCCESS + "all enrollments")
                 .data(enrollments)
                 .paging(null)
                 .build();

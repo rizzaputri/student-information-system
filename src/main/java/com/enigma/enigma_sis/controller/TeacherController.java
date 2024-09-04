@@ -4,9 +4,12 @@ import com.enigma.enigma_sis.constant.ApiUrl;
 import com.enigma.enigma_sis.constant.ConstantMessage;
 import com.enigma.enigma_sis.dto.request.UpdateTeacherRequest;
 import com.enigma.enigma_sis.dto.response.CommonResponse;
+import com.enigma.enigma_sis.dto.response.PagingResponse;
 import com.enigma.enigma_sis.dto.response.TeacherResponse;
+import com.enigma.enigma_sis.entity.Teacher;
 import com.enigma.enigma_sis.service.TeacherService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,7 +32,7 @@ public class TeacherController {
         CommonResponse<TeacherResponse> response = CommonResponse
                 .<TeacherResponse>builder()
                 .statusCode(HttpStatus.OK.value())
-                .message(ConstantMessage.FETCH_SUCCES + teacher.getName())
+                .message(ConstantMessage.FETCH_SUCCESS + teacher.getName())
                 .data(teacher)
                 .build();
 
@@ -38,15 +41,34 @@ public class TeacherController {
 
     @GetMapping
     public ResponseEntity<CommonResponse<List<TeacherResponse>>> getAllTeachers(
-            @RequestParam(name = "name", required = false) String name
+            @RequestParam(name = "name", required = false) String name,
+            @RequestParam(name = "page") String page
     ) {
-        List<TeacherResponse> teachers = teacherService.getAllTeachers(name);
+        Page<Teacher> pagedTeachers = teacherService.getAllTeachers(name, page);
+
+        List<TeacherResponse> teachers = pagedTeachers.stream().map(teacher ->
+                TeacherResponse.builder()
+                        .id(teacher.getId())
+                        .name(teacher.getName())
+                        .status(teacher.getStatus())
+                        .teacherEmail(teacher.getTeacherEmail())
+                        .userAccountId(teacher.getUserAccount().getId())
+                        .build())
+                .toList();
 
         CommonResponse<List<TeacherResponse>> response = CommonResponse
                 .<List<TeacherResponse>>builder()
                 .statusCode(HttpStatus.OK.value())
-                .message(ConstantMessage.FETCH_SUCCES + "all teachers")
+                .message(ConstantMessage.FETCH_SUCCESS + "all teachers")
                 .data(teachers)
+                .paging(PagingResponse.builder()
+                        .totalPage(pagedTeachers.getTotalPages())
+                        .totalElement(pagedTeachers.getTotalElements())
+                        .page(pagedTeachers.getNumber() + 1)
+                        .size(2)
+                        .hasPrevious(pagedTeachers.hasPrevious())
+                        .hasNext(pagedTeachers.hasNext())
+                        .build())
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -61,7 +83,7 @@ public class TeacherController {
         CommonResponse<TeacherResponse> response = CommonResponse
                 .<TeacherResponse>builder()
                 .statusCode(HttpStatus.OK.value())
-                .message(ConstantMessage.UPDATE_SUCCES + updateTeacher.getName())
+                .message(ConstantMessage.UPDATE_SUCCESS + updateTeacher.getName())
                 .data(updateTeacher)
                 .build();
 
@@ -78,7 +100,7 @@ public class TeacherController {
         CommonResponse<?> response = CommonResponse
                 .builder()
                 .statusCode(HttpStatus.OK.value())
-                .message(ConstantMessage.UPDATE_SUCCES + teacherService.getById(id).getName())
+                .message(ConstantMessage.UPDATE_SUCCESS + teacherService.getById(id).getName())
                 .data("OK")
                 .build();
 
@@ -95,7 +117,7 @@ public class TeacherController {
         CommonResponse<?> response = CommonResponse
                 .builder()
                 .statusCode(HttpStatus.OK.value())
-                .message(ConstantMessage.DELETE_SUCCES + id)
+                .message(ConstantMessage.DELETE_SUCCESS + id)
                 .data("OK")
                 .build();
 

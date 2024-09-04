@@ -8,8 +8,13 @@ import com.enigma.enigma_sis.entity.UserAccount;
 import com.enigma.enigma_sis.repository.StudentRepository;
 import com.enigma.enigma_sis.service.StudentService;
 import com.enigma.enigma_sis.service.UserService;
+import com.enigma.enigma_sis.specification.StudentSpecification;
 import com.enigma.enigma_sis.util.ValidationUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,13 +53,15 @@ public class StudentServiceImpl implements StudentService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<StudentResponse> getAllStudents(String name) {
-        if (name != null) {
-            List<Student> studentParameterList = studentRepository.findAllByNameLike("%" + name + "%");
-            return studentParameterList.stream().map(this::convertToStudentResponse).toList();
+    public Page<Student> getAllStudents(String name, String page) {
+        Pageable pageable = PageRequest.of(Integer.parseInt(page), 2);
+        Specification<Student> specification = Specification.where(null);
+
+        if (name != null && !name.isEmpty()) {
+            specification = specification.and(StudentSpecification.hasName(name));
         }
-        List<Student> studentList = studentRepository.findAll();
-        return studentList.stream().map(this::convertToStudentResponse).toList();
+
+        return studentRepository.findAll(specification, pageable);
     }
 
     @Transactional(rollbackFor = Exception.class)

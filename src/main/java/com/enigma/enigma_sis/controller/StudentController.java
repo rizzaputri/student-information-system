@@ -4,10 +4,12 @@ import com.enigma.enigma_sis.constant.ApiUrl;
 import com.enigma.enigma_sis.constant.ConstantMessage;
 import com.enigma.enigma_sis.dto.request.UpdateStudentRequest;
 import com.enigma.enigma_sis.dto.response.CommonResponse;
+import com.enigma.enigma_sis.dto.response.PagingResponse;
 import com.enigma.enigma_sis.dto.response.StudentResponse;
 import com.enigma.enigma_sis.entity.Student;
 import com.enigma.enigma_sis.service.StudentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,7 +32,7 @@ public class StudentController {
         CommonResponse<StudentResponse> response = CommonResponse
                 .<StudentResponse>builder()
                 .statusCode(HttpStatus.OK.value())
-                .message(ConstantMessage.FETCH_SUCCES + student.getName())
+                .message(ConstantMessage.FETCH_SUCCESS + student.getName())
                 .data(student)
                 .build();
 
@@ -39,15 +41,34 @@ public class StudentController {
 
     @GetMapping
     public ResponseEntity<CommonResponse<List<StudentResponse>>> getAllStudents(
-            @RequestParam(name = "name", required = false) String name
+            @RequestParam(name = "name", required = false) String name,
+            @RequestParam(name = "page") String page
     ) {
-        List<StudentResponse> students = studentService.getAllStudents(name);
+        Page<Student> pagedStudents = studentService.getAllStudents(name, page);
+
+        List<StudentResponse> students = pagedStudents.getContent().stream().map(
+                student -> StudentResponse.builder()
+                        .id(student.getId())
+                        .name(student.getName())
+                        .studyGroup(student.getStudyGroup())
+                        .studentEmail(student.getStudentEmail())
+                        .userAccountId(student.getUserAccount().getId())
+                        .build()
+        ).toList();
 
         CommonResponse<List<StudentResponse>> response = CommonResponse
                 .<List<StudentResponse>>builder()
                 .statusCode(HttpStatus.OK.value())
-                .message(ConstantMessage.FETCH_SUCCES + "all students")
+                .message(ConstantMessage.FETCH_SUCCESS + "all students")
                 .data(students)
+                .paging(PagingResponse.builder()
+                        .totalPage(pagedStudents.getTotalPages())
+                        .totalElement(pagedStudents.getTotalElements())
+                        .page(pagedStudents.getNumber() + 1)
+                        .size(2)
+                        .hasNext(pagedStudents.hasNext())
+                        .hasPrevious(pagedStudents.hasPrevious())
+                        .build())
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -62,7 +83,7 @@ public class StudentController {
         CommonResponse<StudentResponse> response = CommonResponse
                 .<StudentResponse>builder()
                 .statusCode(HttpStatus.OK.value())
-                .message(ConstantMessage.UPDATE_SUCCES + updateStudent.getName())
+                .message(ConstantMessage.UPDATE_SUCCESS + updateStudent.getName())
                 .data(updateStudent)
                 .build();
 
@@ -79,7 +100,7 @@ public class StudentController {
         CommonResponse<?> response = CommonResponse
                 .builder()
                 .statusCode(HttpStatus.OK.value())
-                .message(ConstantMessage.DELETE_SUCCES + id)
+                .message(ConstantMessage.DELETE_SUCCESS + id)
                 .data("OK")
                 .build();
 
