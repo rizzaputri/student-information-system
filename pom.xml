@@ -12,7 +12,7 @@
 	<artifactId>enigma-sis</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>enigma-sis</name>
-	<description>Student Information System (SIS) Application</description>
+	<description>Student Information System Application</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -78,7 +78,6 @@
 			<artifactId>java-jwt</artifactId>
 			<version>4.4.0</version>
 		</dependency>
-
 	</dependencies>
 
 	<build>

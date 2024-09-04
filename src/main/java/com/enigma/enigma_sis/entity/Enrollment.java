@@ -2,23 +2,20 @@ package com.enigma.enigma_sis.entity;
 
 import com.enigma.enigma_sis.constant.ConstantTable;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = ConstantTable.ENROLLMENT)
 public class Enrollment {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "custom_seq")
-    @SequenceGenerator(name = "custom_seq", sequenceName = "custom_id_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     @ManyToOne
@@ -27,6 +24,9 @@ public class Enrollment {
 
     @OneToMany(mappedBy = "enrollment")
     private List<EnrollmentDetail> enrollmentDetails;
+
+    @Column(name = "enrollment_term", nullable = false)
+    private String enrollmentTerm;
 
     @Column(name = "study_load")
     private Integer studyLoad;

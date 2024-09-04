@@ -42,15 +42,14 @@
 - **Rules**:
     - Gunakan format snake_case untuk nama repository.
     - Gunakan format kebab-case untuk nama aplikasi.
-    - Contoh: `ch_sb_1_enigma-sis`
+    - Contoh: `ch_sb_1_student_report`
 
 ## 7. Git Branch Names
 
-- **Format**: `kebab-case`
+- **Format**: `feature-name`
 - **Rules**:
     - Gunakan format kebab-case untuk nama branch.
-    - Awali nama branch dengan kata `feature`.
-    - Contoh: `feature-login`, `feature-register`
+    - Contoh: `feature-register`, `feature-enrollment`
 
 ## 8. Commit Message
 
@@ -64,6 +63,6 @@
     - `[STYLE]` melakukan perubahan yang tidak berdampak pada program
     - `[CHORE]` melakukan commit awal
 - **Contoh**
-    - "`[FEAT]` Add feature login"
+    - "`[FEAT]` Add feature : student input"
     - "`[DOCS]` Fix typo in naming-conventions.md"
     - "`[STYLE]` Add whitespace on Student.java"

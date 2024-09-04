@@ -15,19 +15,22 @@ import java.util.List;
 @Table(name = ConstantTable.TEACHER)
 public class Teacher {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "custom_seq")
-    @SequenceGenerator(name = "custom_seq", sequenceName = "custom_id_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "email", nullable = false)
-    private String email;
+    @Column(name = "status")
+    private Boolean status;
 
     @Column(name = "mobile_phone")
     private String mobilePhone;
 
-    @OneToMany(mappedBy = "teacher")
-    private List<Subject> subjects;
+    @Column(name = "teacher_email")
+    private String teacherEmail;
+
+    @OneToOne
+    @JoinColumn(name = "user_account_id")
+    private UserAccount userAccount;
 }

@@ -4,6 +4,8 @@ import com.enigma.enigma_sis.constant.ConstantTable;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @Builder
@@ -13,19 +15,25 @@ import lombok.*;
 @Table(name = ConstantTable.STUDENT)
 public class Student {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "custom_seq")
-    @SequenceGenerator(name = "custom_seq", sequenceName = "custom_id_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "email", nullable = false)
-    private String email;
+    @Column(name = "birth_date")
+    private Date birthDate;
+
+    @Column(name = "study_group")
+    private String studyGroup;
 
     @Column(name = "mobile_phone")
     private String mobilePhone;
 
-    @Column(name = "study_group")
-    private String studyGroup;
+    @Column(name = "student_email")
+    private String studentEmail;
+
+    @OneToOne
+    @JoinColumn(name = "user_account_id")
+    private UserAccount userAccount;
 }

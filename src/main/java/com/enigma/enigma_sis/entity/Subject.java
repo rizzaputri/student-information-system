@@ -13,15 +13,14 @@ import lombok.*;
 @Table(name = ConstantTable.SUBJECT)
 public class Subject {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "custom_seq")
-    @SequenceGenerator(name = "custom_seq", sequenceName = "custom_id_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "lesson_hours", nullable = false)
-    private Integer lessonHours;
+    @Column(name = "lessons_hours")
+    private Integer lessonsHours;
 
     @ManyToOne
     @JoinColumn(name = "teacher_id")
