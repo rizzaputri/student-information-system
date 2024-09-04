@@ -8,7 +8,7 @@ public class ApiUrl {
     public static final String SUBJECT_URL = "/api/v1/subjects";
     public static final String ENROLLMENT_URL = "/api/v1/enrollments";
 
-    public static final String AUTH_API = "/api/v1/sis-auth";
-    public static final String AUTH_REGISTER = "/api/v1/sis-auth/register";
-    public static final String AUTH_LOGIN = "/api/v1/sis-auth/login";
+    public static final String AUTH_URL = "/api/v1/sis-auth";
+    public static final String AUTH_REGISTER = "/register";
+    public static final String AUTH_LOGIN = "/login";
 }
