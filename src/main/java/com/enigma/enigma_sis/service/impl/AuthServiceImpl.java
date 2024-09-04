@@ -42,9 +42,9 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
-    @Value("${enigma_shop.superadmin.username}")
+    @Value("${enigma_sis.superadmin.username}")
     private String usernameSuperAdmin;
-    @Value("${enigma_shop.superadmin.password}")
+    @Value("${enigma_sis.superadmin.password}")
     private String passwordSuperAdmin;
 
     @Transactional(rollbackFor = Exception.class)
